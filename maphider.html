@@ -8,7 +8,7 @@
             body {
                 font-family: Verdana;
             }
-            div {
+            .part1, .part2 {
                 margin:0 1px 10px 0;
                 width: 49.5%;
                 height: 250px;
@@ -24,20 +24,50 @@
                 height: 100%;
                 resize: none;
             }
-            button {
-                float: right;
-            }
+            
             #tip {
                 color: dodgerblue;
+            }
+            .right {
+                float: right;
             }
         </style>
         <script>
             function conv()
             {
                 var string = document.getElementById('texta').value;
+                var output = document.getElementById('textb');
+                output.innerHTML = "";
+                var tip = document.getElementById('tip');
                 if (string.length == 0)
                 {
-                    document.getElementById('tip').innerHTML="abc";
+                    tip.innerHTML = "Nothing to convert!";
+                    return;
+                }
+                var line = string.split("\n");
+                for(var i = 0; i < line.length; i++)
+                {
+                    var col = line[i].split(",");
+                    if (col.length >= 6)
+                    {
+                        if (document.getElementById("ifvector").checked)
+                        {
+                            var pos = new Array(3);
+                            pos[0] = Math.floor(parseInt(col[3]) * 10) + 0.5;
+                            pos[1] = Math.floor(parseInt(col[4]) * 10) + 0.5;
+                            pos[2] = Math.floor(parseInt(col[5]) * 10) + 0.5;
+                            output.innerHTML += "RawHideMapObject(" + col[0] + "," + pos[0] + "," + pos[1] + "," + pos[2] + ")\n";
+                        }
+                        else
+                        {
+                            output.innerHTML += "HideMapObject(" + col[0] + "," + col[3] + "," + col[4] + "," + col[5] + ")\n";
+                        }
+                    }
+                    else
+                    {
+                        tip.innerHTML = "Found error!";
+                        output.innerHTML += "Line " + (i + 1) + " Error!\n";
+                    }
                 }
             }
         </script>
@@ -50,6 +80,9 @@
             <textarea id="textb" readonly=true></textarea>
         </div>
         <span id="tip"></span>
+        <div class="right">
+        <input type="checkbox" id="ifvector">Convert Vector</input>
         <button onclick="conv()">Convert</button>
+        </div>
     </body>
 </html>
