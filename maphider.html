@@ -2,11 +2,17 @@
 <html>
     <head>
         <meta charset='utf-8'>
-        <title>VCMPMapHider</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>VCMPMapHider</title>
         <style>
             body {
-                font-family: Verdana;
+                font: 13px/1.4 Helvetica;
+                cursor: default;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                -khtml-user-select: none;
+                user-select: none; /*block selection*/
             }
             .part1, .part2 {
                 margin:0 1px 10px 0;
@@ -24,12 +30,17 @@
                 height: 100%;
                 resize: none;
             }
-            
             #tip {
                 color: dodgerblue;
             }
+            .left {
+                float: left;
+            }
             .right {
-                float: right;
+                text-align: right;
+            }
+            .footer {
+                margin: 10px 0 0 0;
             }
         </style>
         <script>
@@ -56,12 +67,16 @@
                             pos[0] = Math.floor(parseInt(col[3]) * 10) + 0.5;
                             pos[1] = Math.floor(parseInt(col[4]) * 10) + 0.5;
                             pos[2] = Math.floor(parseInt(col[5]) * 10) + 0.5;
-                            output.innerHTML += "RawHideMapObject(" + col[0] + "," + pos[0] + "," + pos[1] + "," + pos[2] + ")\n";
+                            output.innerHTML += "RawHideMapObject(" + col[0] + "," + pos[0] + "," + pos[1] + "," + pos[2];
                         }
                         else
                         {
-                            output.innerHTML += "HideMapObject(" + col[0] + "," + col[3] + "," + col[4] + "," + col[5] + ")\n";
+                            output.innerHTML += "HideMapObject(" + col[0] + "," + col[3] + "," + col[4] + "," + col[5];
                         }
+                        output.innerHTML += ")";
+                        if (document.getElementById("ifcomments").checked)
+                            output.innerHTML += "  //" + col[1];
+                        output.innerHTML += "\n";
                     }
                     else
                     {
@@ -73,16 +88,16 @@
         </script>
     </head>
     <body>
-        <div class="part1">
-            <textarea id="texta"></textarea>
-        </div>
-        <div class="part2">
-            <textarea id="textb" readonly=true></textarea>
-        </div>
-        <span id="tip"></span>
+        <div class="part1"><textarea id="texta" spellcheck=false></textarea></div>
+        <div class="part2"><textarea id="textb" readonly=true spellcheck=false onclick="this.focus();this.select();"></textarea></div>
+        <div class="left"><span id="tip" style="text-align: right;"></span></div>
         <div class="right">
-        <input type="checkbox" id="ifvector">Convert Vector</input>
-        <button onclick="conv()">Convert</button>
+            <input type="checkbox" name="ifcomments" id="ifcomments" />
+            <label for="ifcomments">Add Comments</label>
+            <input type="checkbox" name="ifvector" id="ifvector" />
+            <label for="ifvector">Convert Vector</label>
+            <button onclick="conv()">Convert</button>
         </div>
+        <div align="center" class="footer">Code by <a href="https://github.com/ysc3839">ysc3839</a>. <a href="https://github.com/ysc3839/vcmpconv">View on GitHub</a></div>
     </body>
 </html>
