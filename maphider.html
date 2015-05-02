@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>VCMPMapHider</title>
+        <style>
+            body {
+                font: 13px/1.4 Helvetica;
+                cursor: default;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                -khtml-user-select: none;
+                user-select: none; /*block selection*/
+            }
+            .part1, .part2 {
+                margin:0 1px 10px 0;
+                width: 49.5%;
+                height: 250px;
+            }
+            .part1 {
+                float: left;
+            }
+            .part2 {
+                float: right;
+            }
+            textarea {
+                width: 100%;
+                height: 100%;
+                resize: none;
+            }
+            #tip {
+                color: dodgerblue;
+            }
+            .left {
+                float: left;
+            }
+            .right {
+                text-align: right;
+            }
+            .footer {
+                margin: 10px 0 0 0;
+            }
+        </style>
+        <script>
+            function conv()
+            {
+                var string = document.getElementById('texta').value;
+                var output = document.getElementById('textb');
+                output.innerHTML = "";
+                var tip = document.getElementById('tip');
+                if (string.length == 0)
+                {
+                    tip.innerHTML = "Nothing to convert!";
+                    return;
+                }
+                var line = string.split("\n");
+                for(var i = 0; i < line.length; i++)
+                {
+                    var col = line[i].split(",");
+                    if (col.length >= 6)
+                    {
+                        if (document.getElementById("ifvector").checked)
+                        {
+                            var pos = new Array(3);
+                            pos[0] = Math.floor(parseInt(col[3]) * 10) + 0.5;
+                            pos[1] = Math.floor(parseInt(col[4]) * 10) + 0.5;
+                            pos[2] = Math.floor(parseInt(col[5]) * 10) + 0.5;
+                            output.innerHTML += "RawHideMapObject(" + col[0] + "," + pos[0] + "," + pos[1] + "," + pos[2];
+                        }
+                        else
+                        {
+                            output.innerHTML += "HideMapObject(" + col[0] + "," + col[3] + "," + col[4] + "," + col[5];
+                        }
+                        output.innerHTML += ")";
+                        if (document.getElementById("ifcomments").checked)
+                            output.innerHTML += "  //" + col[1];
+                        output.innerHTML += "\n";
+                    }
+                    else
+                    {
+                        tip.innerHTML = "Found error!";
+                        output.innerHTML += "Line " + (i + 1) + " Error!\n";
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="part1"><textarea id="texta" spellcheck=false></textarea></div>
+        <div class="part2"><textarea id="textb" readonly=true spellcheck=false onclick="this.focus();this.select();"></textarea></div>
+        <div class="left"><span id="tip" style="text-align: right;"></span></div>
+        <div class="right">
+            <input type="checkbox" name="ifcomments" id="ifcomments" />
+            <label for="ifcomments">Add Comments</label>
+            <input type="checkbox" name="ifvector" id="ifvector" />
+            <label for="ifvector">Convert Vector</label>
+            <button onclick="conv()">Convert</button>
+        </div>
+        <div align="center" class="footer">Code by <a href="https://github.com/ysc3839">ysc3839</a>. <a href="https://github.com/ysc3839/vcmpconv">View on GitHub</a></div>
+    </body>
+</html>
