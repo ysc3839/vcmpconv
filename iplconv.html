@@ -47,10 +47,17 @@
                 var tip = document.getElementById('tip');
                 var founderror = false;
                 var errline = "";
+                var idstart = -1;
+                var override = false;
                 if (string.length == 0)
                 {
                     tip.innerHTML = "Nothing to convert!";
                     return;
+                }
+                if (document.getElementById('override').checked)
+                {
+                    override = true;
+                    idstart = parseInt(document.getElementById('idstart').value);
                 }
                 var line = string.split("\n");
                 for(var i = 0; i < line.length; i++)
@@ -60,6 +67,8 @@
                     {
                         if (col.length >= 13)
                             col.splice(2, 1); //Remove interior ID
+                        if (override)
+                            col[0] = (idstart + i).toString();
                         output += '\t<item model="' + col[0] + '" name="' + col[1] + '">\r\n\t\t<position x="' + col[2] + '" y="' + col[3] + '" z="' + col[4] + '" />\r\n\t\t<rotation format="axisangle" x="' + col[8] + '" y="' + col[9] + '" z="' + col[10] + '" angle="' + col[11] + '" />\r\n\t</item>\r\n';
                     }
                     else
@@ -116,7 +125,7 @@
         <div class="part"><textarea id="texta" spellcheck=false></textarea></div>
         <div class="left"><span id="tip" style="text-align: right;"></span></div>
         <div class="right">
-            <input type="checkbox" name="override" id="override" onclick="document.getElementById('idstart').disabled=!document.getElementById('override').checked" disabled=true/>
+            <input type="checkbox" name="override" id="override" onclick="document.getElementById('idstart').disabled=!document.getElementById('override').checked" />
             <label for="override">Override model ID start <input id="idstart" disabled=false value="6000" /></label>
             <button onclick="conv()">Convert and save</button>
         </div>
