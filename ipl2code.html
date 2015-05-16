@@ -3,7 +3,7 @@
     <head>
         <meta charset='utf-8'>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>VCMPMapHider</title>
+        <title>VCMPIPLConverter</title>
         <style>
             body {
                 font: 13px/1.4 Helvetica;
@@ -42,11 +42,14 @@
             .footer {
                 margin: 10px 0 0 0;
             }
+            #idstart {
+                width: 5%;
+            }
         </style>
         <script>
             function conv()
             {
-                var string = document.getElementById('texta').value;
+                var string = document.getElementById('texta').value.replace(/ /g, "");
                 var output = document.getElementById('textb');
                 output.innerHTML = "";
                 var tip = document.getElementById('tip');
@@ -59,24 +62,11 @@
                 for(var i = 0; i < line.length; i++)
                 {
                     var col = line[i].split(",");
-                    if (col.length >= 6)
+                    if (col.length >= 12)
                     {
-                        if (document.getElementById("ifvector").checked)
-                        {
-                            var pos = new Array(3);
-                            pos[0] = Math.floor(parseInt(col[3]) * 10) + 0.5;
-                            pos[1] = Math.floor(parseInt(col[4]) * 10) + 0.5;
-                            pos[2] = Math.floor(parseInt(col[5]) * 10) + 0.5;
-                            output.innerHTML += "RawHideMapObject(" + col[0] + "," + pos[0] + "," + pos[1] + "," + pos[2];
-                        }
-                        else
-                        {
-                            output.innerHTML += "HideMapObject(" + col[0] + "," + col[3] + "," + col[4] + "," + col[5];
-                        }
-                        output.innerHTML += ");";
-                        if (document.getElementById("ifcomments").checked)
-                            output.innerHTML += "  //" + col[1];
-                        output.innerHTML += "\n";
+                        if (col.length >= 13)
+                            col.splice(2, 1); //Remove interior ID
+                        output.innerHTML += "CreateObject(" + col[0] + ", 1, " + col[2] + ", " + col[3] + ", " + col[4] + ", 255).RotateTo(Quaternion(" + col[8] + ", " + col[9] + ", " + col[10] + ", " + col[11] + "), 0);\n";
                     }
                     else
                     {
@@ -92,10 +82,8 @@
         <div class="part2"><textarea id="textb" readonly=true spellcheck=false onclick="this.focus();this.select();"></textarea></div>
         <div class="left"><span id="tip" style="text-align: right;"></span></div>
         <div class="right">
-            <input type="checkbox" name="ifcomments" id="ifcomments" />
-            <label for="ifcomments">Add Comments</label>
-            <input type="checkbox" name="ifvector" id="ifvector" />
-            <label for="ifvector">Convert Vector</label>
+            <input type="checkbox" name="override" id="override" onclick="document.getElementById('idstart').disabled=!document.getElementById('override').checked" disabled=true/>
+            <label for="override">Override model ID start <input id="idstart" disabled=false value="6000" /></label>
             <button onclick="conv()">Convert</button>
         </div>
         <div align="center" class="footer">Code by <a href="https://github.com/ysc3839">ysc3839</a>. <a href="https://github.com/ysc3839/vcmpconv">View on GitHub</a></div>
