@@ -75,7 +75,7 @@
                             col.splice(2, 1); //Remove interior ID
                         if (override)
                             col[0] = (idstart + i).toString();
-                        output.innerHTML += "CreateObject(" + col[0] + ", 1, " + col[2] + ", " + col[3] + ", " + col[4] + ", 255).RotateTo(Quaternion(" + col[8] + ", " + col[9] + ", " + col[10] + ", " + col[11] + "), 0);";
+                        output.innerHTML += "CreateObject(" + col[0] + ", 1, " + col[2] + ", " + col[3] + ", " + col[4] + ", 255).RotateBy(Quaternion(" + col[8] + ", " + col[9] + ", " + col[10] + ", " + col[11] + "), 0);";
                         if (document.getElementById("ifcomments").checked)
                             output.innerHTML += "  //" + col[1];
                         output.innerHTML += "\n";
